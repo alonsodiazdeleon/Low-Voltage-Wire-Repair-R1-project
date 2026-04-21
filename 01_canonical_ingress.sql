@@ -57,5 +57,5 @@ where 1=1
 and is_field_performance_metric_included =1 
 and cr_labor_code ='780095014'
 and s.sr_completed_date >= '2026-01-01'
-  -- Pilot: AND s.v_veh_program LIKE 'R1%'
-;
+  -- and v_vehicle_model like 'R1%' --> Pilot R1: 
+  --  and v_veh_program like 'R1%' --> Alt pilot 'launch', 'mca', 'Peregrine'
