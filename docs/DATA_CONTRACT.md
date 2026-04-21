@@ -26,13 +26,25 @@ All harness warranty marts and notebooks **build on this contract** unless versi
 - `cr_labor_code = '780095014'`
 - `sr_completed_date >= '<start_date>'` (parameterize)
 
-## Pilot program filter
+## Pilot scope (R1) — optional
 
-Add when ready:
+**Default in repo:** no program/model filter (broadest claims set that passes labor/FPM/date filters).
+
+**To limit to R1S/R1T**, uncomment **one** line in `01_canonical_ingress.sql` (validated on model):
+
+```sql
+AND v_vehicle_model LIKE 'R1%'
+```
+
+**Alternative** if your dashboard uses program instead of model:
 
 ```sql
 AND v_veh_program LIKE 'R1%'
 ```
+
+## Column qualification (Databricks / Spark)
+
+Aligned with the **current claims / dashboard** query: columns are mostly **unqualified**; use `s.` only where required (e.g. `sr_completed_date` in `WHERE`). **`tier3`** is kept as plain `tier3` to match the source (tier dropdown / sub-menus).
 
 ## Grain warning
 

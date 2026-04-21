@@ -1,10 +1,10 @@
-# Harness warranty analytics (R1 pilot)
+# Harness warranty analytics
 
 Databricks-native analytics for **wiring harness repair** warranty work: join ServiceOS claims + QA answers to **EBOM/SBOM** and service parts, classify **free-text** connector/circuit/location, and roll up by harness family for PD/SQE action items.
 
 ## Pilot scope
 
-- **Program filter:** `R1%` (R1S / R1T) — add to queries when ready (see `queries/01_staging/01_canonical_ingress.sql`).
+- **R1 filter:** optional — **off by default** in `01_canonical_ingress.sql`; uncomment `v_vehicle_model LIKE 'R1%'` (or `v_veh_program`) when you want R1S/R1T only.
 - **Mapping authority:** EBOM-first (`dim_fct_catia_ebom_parts`, `dim_sbom_parts`, serviceable views as needed).
 - **Canonical ingress:** matches the query that feeds the existing Databricks Dashboard (see `docs/DATA_CONTRACT.md`).
 
@@ -25,8 +25,8 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 
 ## Next steps
 
-1. Run `01_canonical_ingress.sql` in Databricks (adjust date/program filters).
-2. Profile `dim_sbom_parts` / `dim_fct_catia_ebom_parts` join keys for R1%.
+1. Run `01_canonical_ingress.sql` in Databricks (adjust date; optional uncomment R1 model/program filter).
+2. Profile `dim_sbom_parts` / `dim_fct_catia_ebom_parts` join keys (e.g. when R1 filter is on).
 3. Add enrichment SQL under `queries/02_enrichment/` and optional Delta tables for mapping rules.
 
 ## Governance
