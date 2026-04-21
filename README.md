@@ -12,7 +12,7 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 
 | Path | Purpose |
 |------|---------|
-| `queries/01_staging/` | Dashboard-aligned base query (`tt` + `vs_rpt_flat_view`). |
+| `queries/01_staging/` | `01_canonical_ingress.sql` (base); `02_free_text_profile.sql` (null % + top 30 for Q2/Q3/Q4). |
 | `queries/02_enrichment/` | SBOM/EBOM/SOS joins (add as you validate keys). |
 | `notebooks/` | Profiling, Python/pandas, Jobs source. |
 | `mapping/` | Connector/circuit **alias** definitions (CSV → load to Delta) and notes. |
@@ -26,8 +26,9 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 ## Next steps
 
 1. Run `01_canonical_ingress.sql` in Databricks (adjust date; optional uncomment R1 model/program filter).
-2. Profile `dim_sbom_parts` / `dim_fct_catia_ebom_parts` join keys (e.g. when R1 filter is on).
-3. Add enrichment SQL under `queries/02_enrichment/` and optional Delta tables for mapping rules.
+2. Run **`02_free_text_profile.sql`** end-to-end (same filters as step 1) — summary + top values for connector/circuit/location; drives alias-table design.
+3. Profile `dim_sbom_parts` / `dim_fct_catia_ebom_parts` join keys (e.g. when R1 filter is on).
+4. Add enrichment SQL under `queries/02_enrichment/` (SOS parts → SBOM/EBOM) and Delta tables for mapping rules.
 
 ## Governance
 
