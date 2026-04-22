@@ -53,3 +53,11 @@ Aligned with the **current claims / dashboard** query: columns are mostly **unqu
 ## Mapping focus
 
 Wrap **EBOM/SBOM/parts/drawing links** around **Q2, Q3, Q4** free text; use Q1 and images for classification and reporting.
+
+## Part numbers on the SR (no commercial SOS table required)
+
+Per-line part consumption and costs: use **`pu_part_*` fields on** `main.vehicle_services.vs_rpt_flat_view` (see `docs/PARTS_AND_MARTS.md`). The enrichment query `queries/02_enrichment/01_base_with_flat_view_parts.sql` adds them to the harness-labor filter set.
+
+## Event-level repair metrics
+
+Use **`main.rel_field.vs_rpt_repair_rates_mv`** (claim rows) joined on your standard VIN + SR keys when you need `vehicle_system`, `endpoint_*`, `days_to_failure`, etc. — not as a full substitute for per-part line detail; see `docs/PARTS_AND_MARTS.md`.

@@ -1,11 +1,12 @@
 # Enrichment queries (Phase 1+)
 
-Add SQL here after profiling join keys:
+| File | Purpose |
+|------|--------|
+| **`01_base_with_flat_view_parts.sql`** | Same harness filter as `01_canonical_ingress` + **`pu_part_*`** (and `sr_pri_fail_part_*`) from **`vs_rpt_flat_view`**. Optional commented block: all part lines for those SRs. **No** `fct_sos_detailed_service_rpt` (restricted; not needed for MVP). |
 
-1. **`fct_sos_detailed_service_rpt`** — parts on SR (join on VIN / WO / SR / date as validated).
-2. **`dim_sbom_parts`** — filter to harness/connector/LVE/R1 model.
-3. **`dim_fct_catia_ebom_parts`** — parent harness ↔ child connector.
-4. **Serviceable views** — when service PN path differs from engineering EBOM.
-5. **`stg_service_npi__parts_drawing_links`** — PDF link by `part_number` for heat-map / PD handoff.
+**Roadmap (new files as you go):**
 
-Suggested pattern: build from `01_staging/01_canonical_ingress.sql` as a CTE or temp view, then layer joins in separate files (e.g. `02_with_sbom_parts.sql`).
+1. **`dim_sbom_parts`** — filter consumed part numbers to harness / connector / LVE / model.
+2. **`dim_fct_catia_ebom_parts`** — parent harness ↔ child connector.
+3. **Serviceable views** — when service PN path differs from engineering EBOM.
+4. **`stg_service_npi__parts_drawing_links`** — PDF link by `part_number` for heat-map / PD handoff.
