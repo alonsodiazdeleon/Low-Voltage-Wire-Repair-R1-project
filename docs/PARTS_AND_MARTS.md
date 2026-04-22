@@ -6,8 +6,8 @@
 |------|----------------------------|------------------------------|
 | Per **part line** (PN, qty, line cost) on a WO/SR | `main.vehicle_services.vs_rpt_flat_view` — `pu_part_*` | `commercial.serviceos_legacy.fct_sos_detailed_service_rpt` (restricted; redundant for this use case) |
 | **Event-level** repair rate / system / exposure / one primary part | `main.rel_field.vs_rpt_repair_rates_mv` (claim rows: `is_vin_pop = 0`) | Same — not a substitute for **multi-part** line detail |
-| **Connector PN → parent harness PN** (engineering structure) | `supply_chain.bom.dim_fct_catia_ebom_parts` + `commercial.service_bom.dim_sbom_parts` | Free-text QA alone; SOS does not add circuit/connector logic |
-| **LVE / model / classification** | `dim_sbom_parts`, optional `main.adhoc.sbom_mapping`, supersession flags | — |
+| **Connector / child PN → parent (EBOM)** | `dim_fct_catia_ebom_parts` — unfiltered in repo; **harnesses come from all orgs**, not LVE only; **filter in join** (system, program) | — |
+| **LVE / model / classification in SBOM** | `dim_sbom_parts`, optional `main.adhoc.sbom_mapping`, supersession flags | — |
 | **Service vs engineering BOM** | `datalake` serviceable child views (optional) | — |
 | **2D PDF link** | `commercial.staging.stg_service_npi__parts_drawing_links` | — |
 
