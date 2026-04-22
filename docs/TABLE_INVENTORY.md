@@ -38,6 +38,14 @@ Confirm column names in Databricks with `DESCRIBE TABLE` / data catalog.
 |-------|------|
 | `commercial.staging.stg_service_npi__parts_drawing_links` | `part_number`, `revision`, `drawing_link` (PDF URL). |
 
+## Project marts (create in *your* schema; names are defaults in repo SQL)
+
+| Table | Source script |
+|-------|---------------|
+| `sandbox.adiazdeleon.harness_ebom_dim_fct_catia_resolved` | `queries/02_enrichment/04_mart_ctas_warranty_ebom.sql` (section A) |
+| `sandbox.adiazdeleon.harness_warranty_780095014_cohort` | Same (section B) |
+| `sandbox.adiazdeleon.harness_mart_warranty_ebom` | Same (section C) — `ebom_match_type` and `ebom_*` columns |
+
 ## Read next
 
 - **`docs/PARTS_AND_MARTS.md`** — how flat view, repair rates, and EBOM fit the project goal.

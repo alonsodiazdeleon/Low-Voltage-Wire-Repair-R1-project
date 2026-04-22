@@ -4,6 +4,9 @@
 |------|--------|
 | **`01_base_with_flat_view_parts.sql`** | Same harness filter as `01_canonical_ingress` + **`pu_part_*`** (and `sr_pri_fail_part_*`) from **`vs_rpt_flat_view`**. Optional commented block: all part lines for those SRs. **No** `fct_sos_detailed_service_rpt` (restricted; not needed for MVP). |
 | **`02_lve_ebom_connector_to_harness_map.sql`** | Full **`dim_fct_catia_ebom_parts`** with `child_pn_resolved` (no LVE/R1 filter — all releasing orgs). **Large** `SELECT *` — use a view or add limits in your workspace. Filter by system/program when **joining** to warranty. |
+| **`03_warranty_ebom_join.sql`** | **`warranty_cohort` LEFT JOIN `ebom_base`** on `pu_part_number` = `child_pn_resolved` / `part_number` / `parent_part_number`. Adds `ebom_*` columns and **`ebom_match_type`**. For heavy jobs, use **`04_mart_ctas_warranty_ebom.sql`**. |
+| **`04_mart_ctas_warranty_ebom.sql`** | **CTAS:** `sandbox.adiazdeleon` — `harness_ebom_dim_fct_catia_resolved` + `harness_warranty_780095014_cohort` + **`harness_mart_warranty_ebom`** (run A/B then C). |
+| **`04c_post_c_notebook_check.sql`** | After C: `SELECT` that **returns a grid** (row counts + optional sample) — for notebooks; CTAS has no preview. |
 
 **Roadmap (new files as you go):**
 

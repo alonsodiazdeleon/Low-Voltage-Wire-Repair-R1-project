@@ -24,7 +24,7 @@ All harness warranty marts and notebooks **build on this contract** unless versi
 
 - `is_field_performance_metric_included = 1`
 - `cr_labor_code = '780095014'`
-- `sr_completed_date >= '<start_date>'` (parameterize)
+- `sr_completed_date >= '<start_date>'` (parameterize; **repo default `2026-01-01`** for the current pilot. If the cohort is empty, widen the date in dev only—see diagnostics in `04_mart_ctas_warranty_ebom.sql` comments.)
 
 ## Pilot scope (R1) — optional
 

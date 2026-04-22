@@ -99,7 +99,10 @@ SELECT
   m.lead_program
 FROM <warranty_with_parts> w
 LEFT JOIN ebom_base m
-  ON TRIM(UPPER(w.pu_part_number)) = TRIM(UPPER(m.child_pn_resolved))
-  OR TRIM(UPPER(w.pu_part_number)) = TRIM(UPPER(m.part_number))
-  OR TRIM(UPPER(w.pu_part_number)) = TRIM(UPPER(m.parent_part_number))
+  ON TRIM(UPPER(COALESCE(CAST(w.pu_part_number AS STRING), ''))) <> ''
+  AND (
+    TRIM(UPPER(COALESCE(CAST(w.pu_part_number AS STRING), ''))) = TRIM(UPPER(COALESCE(CAST(m.child_pn_resolved AS STRING), '')))
+    OR TRIM(UPPER(COALESCE(CAST(w.pu_part_number AS STRING), ''))) = TRIM(UPPER(COALESCE(CAST(m.part_number AS STRING), '')))
+    OR TRIM(UPPER(COALESCE(CAST(w.pu_part_number AS STRING), ''))) = TRIM(UPPER(COALESCE(CAST(m.parent_part_number AS STRING), '')))
+  )
 */

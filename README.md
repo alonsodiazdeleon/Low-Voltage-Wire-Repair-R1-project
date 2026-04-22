@@ -13,7 +13,7 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 | Path | Purpose |
 |------|---------|
 | `queries/01_staging/` | `01_canonical_ingress.sql` (base); `02_free_text_profile.sql` (null % + top 30 for Q2/Q3/Q4). |
-| `queries/02_enrichment/` | `01_…flat_view_parts` + `02_…ebom_…` (full Catia EBOM + `child_pn_resolved`; filter by system at join). |
+| `queries/02_enrichment/` | `01` part lines, `02` EBOM, `03` all-in-one join, **`04` CTAS** marts. |
 | `docs/PARTS_AND_MARTS.md` | **Why** we use flat view + repair rates, not `fct_sos_detailed_service_rpt`. |
 | `notebooks/` | Profiling, Python/pandas, Jobs source. |
 | `mapping/` | Connector/circuit **alias** definitions (CSV → load to Delta) and notes. |
@@ -30,8 +30,8 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 2. Run **`02_free_text_profile.sql`** end-to-end (same filters as step 1) — summary + top values for connector/circuit/location; drives alias-table design.
 3. Read **`docs/PARTS_AND_MARTS.md`** (flat view = part lines; no SOS table required for MVP).
 4. Run **`queries/02_enrichment/01_base_with_flat_view_parts.sql`** — confirm `pu_part_*` populate; use optional second block in file if parts sit on other SR rows.
-5. Run **`queries/02_enrichment/02_lve_ebom_connector_to_harness_map.sql`** (full EBOM; **large** — use a view or `LIMIT` in Databricks if needed). Optional: comment in file for “child edges only.”
-6. **Join** to warranty on **`pu_part_number`** ↔ `child_pn_resolved` / `part_number` / `parent_part_number`, then filter `engineering_system` / program as needed.
+5. Run **`02_lve_ebom_connector_to_harness_map.sql`** (full EBOM) as needed, or a saved table/view in your schema.
+6. Run **`queries/02_enrichment/03_warranty_ebom_join.sql`** (ad-hoc; add outer `LIMIT` if needed) or **`queries/02_enrichment/04_mart_ctas_warranty_ebom.sql`** (sections A, B, C — targets `sandbox.adiazdeleon`; change in file if needed) to build durable tables and the **mart** with `ebom_match_type`.
 7. Add **Delta** mapping tables for Q2/Q3 free text as needed.
 
 ## Governance
