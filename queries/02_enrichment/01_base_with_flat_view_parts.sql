@@ -8,6 +8,10 @@
 -- to pull all part lines for the same SRs (uncomment and align filters).
 --
 -- Connector PN → parent harness PN: use SBOM/EBOM (e.g. dim_sbom_parts + dim_fct_catia_ebom_parts), not SOS.
+--
+-- Runnable query below ends at LIMIT (no trailing `;`). Some Databricks / Genie “run whole file”
+-- paths treat `;` plus following comments / blocks as a second statement and fail with
+-- [PARSE_SYNTAX_ERROR] near end of input.
 
 WITH tt AS (
   SELECT DISTINCT
@@ -71,7 +75,6 @@ WHERE 1 = 1
   -- Pilot R1: AND s.v_vehicle_model LIKE 'R1%'
   -- Alt pilot: AND s.v_veh_program LIKE 'R1%'
 LIMIT 2000
-;
 
 -- =============================================================================
 -- OPTIONAL — all part lines for SRs that appear in the harness-labor set above
@@ -116,5 +119,4 @@ INNER JOIN harness_sr h ON s.sr_service_request_id = h.sr_service_request_id
 WHERE s.pu_part_number IS NOT NULL
   AND s.is_field_performance_metric_included = 1
 LIMIT 5000
-;
 */
