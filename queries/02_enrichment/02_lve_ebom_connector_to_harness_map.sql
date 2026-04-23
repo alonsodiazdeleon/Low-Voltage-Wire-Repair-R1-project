@@ -13,6 +13,10 @@
 --
 -- WARNING: `SELECT *` is the full table shape — large. For ad-hoc, add `LIMIT` or `WHERE` in a saved view
 -- in your own schema. Do not commit a LIMIT here unless you cap for CI only.
+--
+-- Runnable query below ends at `FROM ebom_base` (no trailing `;`). Databricks / Genie “run whole file”
+-- treats `;` plus following `/* … */` as a second statement; a comment-only segment errors with
+-- [PARSE_SYNTAX_ERROR] near end of input.
 
 WITH ebom_base AS (
   SELECT
@@ -73,7 +77,6 @@ WITH ebom_base AS (
 
 SELECT *
 FROM ebom_base
-;
 
 -- =============================================================================
 -- Optional: only rows with a resolved child PN (tighter “edge list” for joins)
@@ -83,7 +86,6 @@ SELECT *
 FROM ebom_base
 WHERE is_parent_part = false
   AND child_pn_resolved IS NOT NULL
-;
 */
 
 -- =============================================================================
