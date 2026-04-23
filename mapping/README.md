@@ -2,6 +2,7 @@
 
 ## Approach
 
+- Use **`queries/03_profiling/01`–`04`** on the materialized cohort to see null % and top raw strings before editing CSVs here.
 - **Q2, Q3, Q4** are free text. Normalize with:
   - **Exact match** lookup tables (Delta or CSV loaded to Unity Catalog).
   - **Regex buckets** for common patterns (optional).

@@ -1,8 +1,10 @@
 -- Free-text profile: connector_number (Q2), circuit (Q3), reapair_location (Q4)
 -- Same tt + filters as 01_canonical_ingress.sql — keep pilot lines in sync when comparing.
 --
--- Run in Databricks SQL: execute the FULL script (all statements). If your UI runs only
--- the first query, run each block (between dashed lines) separately in order.
+-- **Genie / “run whole file”:** this script has multiple statements (`;` + temp view). Use
+-- **`queries/03_profiling/`** for mart-aligned, one-statement-per-file profiling instead.
+--
+-- In a notebook: run each block (between dashed lines) separately in order.
 
 -- =============================================================================
 -- 0) Reusable base: distinct rows at same grain as canonical ingress (subset of cols)

@@ -9,7 +9,7 @@
 | **Connector / child PN → parent (EBOM)** | `dim_fct_catia_ebom_parts` — unfiltered in repo; **harnesses come from all orgs**, not LVE only; **filter in join** (system, program) | — |
 | **LVE / model / classification in SBOM** | `dim_sbom_parts`, optional `main.adhoc.sbom_mapping`, supersession flags | — |
 | **Service vs engineering BOM** | `datalake` serviceable child views (optional) | — |
-| **2D PDF link** | `commercial.staging.stg_service_npi__parts_drawing_links` | — |
+| **2D PDF link** | TBD: **`commercial.staging.stg_service_npi__parts_drawing_links`** (restricted / pending gold) — `queries/03_profiling/05`–`06` | See **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**. |
 
 ## `vs_rpt_flat_view` (primary fact for this program)
 

@@ -36,7 +36,7 @@ Confirm column names in Databricks with `DESCRIBE TABLE` / data catalog.
 
 | Table | Role |
 |-------|------|
-| `commercial.staging.stg_service_npi__parts_drawing_links` | `part_number`, `revision`, `drawing_link` (PDF URL). |
+| `commercial.staging.stg_service_npi__parts_drawing_links` | `part_number`, `revision`, `drawing_link` (PDF URL). **May be blocked** until gold / authorized — repo SQL in **`queries/03_profiling/05`** and **`06`** is ready; run when access exists. See **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**. |
 
 ## Project marts (create in *your* schema; names are defaults in repo SQL)
 
@@ -50,3 +50,4 @@ Confirm column names in Databricks with `DESCRIBE TABLE` / data catalog.
 
 - **`docs/PARTS_AND_MARTS.md`** — how flat view, repair rates, and EBOM fit the project goal.
 - **`docs/OPTIONAL_SOS_ACCESS.md`** — when the SOS fact might be worth requesting.
+- **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`** — NPI drawing staging table: restricted; re-run **03_profiling/05**–**06** after gold access.
