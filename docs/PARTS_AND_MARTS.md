@@ -36,6 +36,11 @@ Neither flat view nor repair rates encodes **circuit** or **connector name** as 
 
 - Filter vehicles with fields you already have: `v_vehicle_platform`, `v_veh_program`, `v_vehicle_model`, or `model_name` in SBOM — **align** with how your org labels Peregrine (Gen2) vs Gen1; confirm in `dim_sbom_parts` and flat view.
 
+## Next work: dedupe vs Q2/Q3 mapping (order)
+
+- **Deduplication (recommend first for dashboards / KPIs):** The EBOM `LEFT JOIN` can emit **many** rows per warranty part line. Before **summing** part counts, costs, or “failures by PN,” add a **reporting** layer (e.g. `ROW_NUMBER` over `sr_service_request_id` + `pu_part_number` + `ebom_match_type`, or pick one “best” EBOM row per policy). That does **not** require free-text rules.
+- **Free-text mapping (can start in parallel):** Connector / circuit **alias** tables and joins work off **`harness_warranty_780095014_cohort`** and profiling **`01`–`04`**; they are **not** blocked by dedupe. Prioritize mapping first only if the next deliverable is **text → engineering ID** before any aggregate dashboard.
+
 ## When commercial SOS fact might still be requested (optional)
 
 See `docs/OPTIONAL_SOS_ACCESS.md` — only for cross-checks or alignment with Carabiner/commercial, not for core PD harness analytics in this repo.

@@ -1,7 +1,8 @@
 -- One row: how mart `pu_part_number` values relate to MIH `drawing_link` — not only “any link”
 --   (see **`05`**) but **no tracker row**, **tracker but blank `drawing_link`**, and links that
 --   **look like Google Drive / Docs** (common when engineering hosts PDFs on Drive).
--- `rep_npi_jira_mih_tracker` join on `service_pn` / `production_pn` (same as **`05`** / **`06`**).
+-- `rep_npi_jira_mih_tracker` join on `service_pn` / `production_pn` / `svc_tracker_production_pn` (see **`05`** / **`06`**).
+-- **has_tracker_row** = any joined row on those keys (uses `d.id` so a match via the third key counts).
 -- No trailing `;` (Genie safe). `docs/OPTIONAL_NPI_DRAWING_LINKS.md`
 
 WITH mart_pns AS (
@@ -14,7 +15,7 @@ per_part AS (
     m.pu_norm,
     MAX(
       CASE
-        WHEN d.service_pn IS NOT NULL OR d.production_pn IS NOT NULL THEN 1
+        WHEN d.id IS NOT NULL THEN 1
         ELSE 0
       END
     ) AS has_tracker_row,
@@ -41,6 +42,7 @@ per_part AS (
   LEFT JOIN commercial.reporting_service_npi.rep_npi_jira_mih_tracker d
     ON m.pu_norm = TRIM(UPPER(CAST(d.service_pn AS STRING)))
     OR m.pu_norm = TRIM(UPPER(CAST(d.production_pn AS STRING)))
+    OR m.pu_norm = TRIM(UPPER(CAST(d.svc_tracker_production_pn AS STRING)))
   GROUP BY m.pu_norm
 )
 SELECT

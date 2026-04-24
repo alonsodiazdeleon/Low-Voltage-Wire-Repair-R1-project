@@ -1,5 +1,6 @@
 -- Sample: up to 40 distinct mart PNs with one tracker row each (latest `created_at` when multiple matches).
--- Mart PN = `service_pn` OR `production_pn` (normalized). Columns align to `rep_npi_jira_mih_tracker`.
+-- Mart PN = `service_pn` OR `production_pn` OR `svc_tracker_production_pn` (normalized).
+-- Columns align to `rep_npi_jira_mih_tracker`.
 -- The tracker also has a column `rn` (row id); the window below is aliased `match_rank` to avoid a name clash.
 -- No trailing `;` (Genie). `docs/OPTIONAL_NPI_DRAWING_LINKS.md`
 
@@ -16,6 +17,7 @@ ranked AS (
     p.pu_norm,
     d.service_pn,
     d.production_pn,
+    d.svc_tracker_production_pn,
     d.implm_title,
     d.procurement_category,
     d.sbom_system,
@@ -37,12 +39,14 @@ ranked AS (
   LEFT JOIN commercial.reporting_service_npi.rep_npi_jira_mih_tracker d
     ON p.pu_norm = TRIM(UPPER(CAST(d.service_pn AS STRING)))
     OR p.pu_norm = TRIM(UPPER(CAST(d.production_pn AS STRING)))
+    OR p.pu_norm = TRIM(UPPER(CAST(d.svc_tracker_production_pn AS STRING)))
 )
 SELECT
   pu_raw,
   pu_norm,
   service_pn,
   production_pn,
+  svc_tracker_production_pn,
   implm_title,
   procurement_category,
   sbom_system,

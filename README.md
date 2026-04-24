@@ -14,7 +14,7 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 |------|---------|
 | `queries/01_staging/` | `01_canonical_ingress.sql` (base); `02_free_text_profile.sql` (multi-cell temp view + tops). |
 | `queries/02_enrichment/` | `01`–`03` joins, **`04` CTAS** marts, **`04c`** smoke, **`04d`** mart QA. |
-| `queries/03_profiling/` | Mart-cohort **Q2/Q3/Q4**; **NPI / MIH** **05**–**07** (links + link-shape; Genie-safe, one `SELECT` per file). |
+| `queries/03_profiling/` | **Q2/Q3/Q4**; **NPI / MIH** **05**–**09** (match, link-shape, unmatched list, **suffix** probe; Genie-safe). |
 | `docs/PARTS_AND_MARTS.md` | **Why** we use flat view + repair rates, not `fct_sos_detailed_service_rpt`. |
 | `notebooks/` | Profiling, Python/pandas, Jobs source. |
 | `mapping/` | Connector/circuit **alias** definitions (CSV → load to Delta) and notes. |
@@ -35,8 +35,9 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 6. Run **`queries/02_enrichment/03_warranty_ebom_join.sql`** (ad-hoc; add outer `LIMIT` if needed) or **`queries/02_enrichment/04_mart_ctas_warranty_ebom.sql`** (sections A, B, C — targets `sandbox.adiazdeleon`; change in file if needed) to build durable tables and the **mart** with `ebom_match_type`.
 7. Run **`queries/02_enrichment/04c_post_c_notebook_check.sql`** then **`04d_mart_quality_summary.sql`** after each mart refresh (counts + match mix).
 8. Run **`queries/03_profiling/01`–`04`** for free-text summary + top 30s (mart cohort).
-9. Run **`queries/03_profiling/05`**, **`06`**, and optional **`07`** (link blanks vs Google Drive / Docs) on **`commercial.reporting_service_npi.rep_npi_jira_mih_tracker`**. See **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**.
-10. Add **Delta** mapping tables for Q2/Q3 free text as needed.
+9. On **`rep_npi_jira_mih_tracker`**, run **`05`–`09`**: link coverage, sample, link-shape, unmatched list, and **`09`** suffix variant probe (keep; tune `regexp_replace` in **`09`** if PN grammar changes). See **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**.
+10. **Reporting grain:** add a **deduped** view or table on **`harness_mart_warranty_ebom`** (one row per warranty part line + chosen EBOM match) so part/cost rollups are not multiplied — see **`docs/PARTS_AND_MARTS.md`** (section **Next work: dedupe vs Q2/Q3 mapping**). **Free-text mapping** (Q2/Q3 → alias / PN) can run **in parallel** on **`harness_warranty_780095014_cohort`**; see **`mapping/README.md`**.
+11. **Delta** mapping tables and joins as rules stabilize.
 
 ## Governance
 

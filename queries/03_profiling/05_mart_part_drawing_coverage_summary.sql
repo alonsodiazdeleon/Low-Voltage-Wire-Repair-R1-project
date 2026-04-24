@@ -1,5 +1,6 @@
 -- NPI / MIH tracker: coverage of distinct **mart** `pu_part_number` (non-blank) vs tracker rows
--- with a non-blank `drawing_link`. Mart PN matches **`service_pn` or `production_pn`** (case-insensitive trim).
+-- with a non-blank `drawing_link`. Mart PN matches **`service_pn` / `production_pn` / `svc_tracker_production_pn`**
+--   (trim/upper).
 -- Target: `commercial.reporting_service_npi.rep_npi_jira_mih_tracker`.
 -- One result row. No trailing `;` (Genie safe). See: `docs/OPTIONAL_NPI_DRAWING_LINKS.md`.
 
@@ -14,6 +15,7 @@ with_link AS (
   INNER JOIN commercial.reporting_service_npi.rep_npi_jira_mih_tracker d
     ON p.pu_norm = TRIM(UPPER(CAST(d.service_pn AS STRING)))
     OR p.pu_norm = TRIM(UPPER(CAST(d.production_pn AS STRING)))
+    OR p.pu_norm = TRIM(UPPER(CAST(d.svc_tracker_production_pn AS STRING)))
   WHERE d.drawing_link IS NOT NULL
     AND TRIM(CAST(d.drawing_link AS STRING)) <> ''
 ),
