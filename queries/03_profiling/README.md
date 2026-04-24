@@ -8,15 +8,16 @@ Same **harness labor + FPM + date** grain as **`04_mart_ctas_warranty_ebom.sql` 
 | 2 | **`02_mart_cohort_top_connector_text.sql`** | Top 30 raw `connector_number` (Q2) |
 | 3 | **`03_mart_cohort_top_circuit_text.sql`** | Top 30 raw `circuit` (Q3) |
 | 4 | **`04_mart_cohort_top_location_text.sql`** | Top 30 raw `reapair_location` (Q4) |
-| 5 | **`05_mart_part_drawing_coverage_summary.sql`** | One row: distinct mart `pu_part_number` vs count with any NPI drawing link |
-| 6 | **`06_mart_part_drawing_sample.sql`** | Up to 40 parts with one link row each (latest `revision` when present) |
+| 5 | **`05_mart_part_drawing_coverage_summary.sql`** | One row: distinct mart PNs vs count matching `rep_npi_jira_mih_tracker` on `service_pn` / `production_pn` with a `drawing_link` |
+| 6 | **`06_mart_part_drawing_sample.sql`** | Up to 40 parts; SBOM, TPM, owners, `ppap_status`, `drawing_link`, `created_at` (see doc) |
+| 7 | **`07_mart_drawing_link_shape.sql`** | One row: no-MIH vs MIH-but-blank-`drawing_link` vs any link vs Google Drive/Docs-shaped links |
 
 **Prereq:** `sandbox.adiazdeleon.harness_warranty_780095014_cohort` and **`harness_mart_warranty_ebom`** exist (run **04** first).
 
 **Genie / “run whole file”:** each file is a **single** `SELECT` with **no** trailing `;`.
 
-**NPI drawing table (`stg_service_npi__parts_drawing_links`):** in many orgs the table is **restricted** or not **gold** yet. **`05`–`06` stay in the repo** as the target design; re-run (or point at the promoted FQN) when you are **authorized** — see **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**. Until then, work can continue on cohort profiling (**`01`–`04`**) and EBOM mart work.
+**NPI / MIH (`commercial.reporting_service_npi.rep_npi_jira_mih_tracker`):** join mart `pu_part_number` to **`service_pn` or `production_pn`**. Staging `stg_service_npi__parts_drawing_links` is not used. Column list: **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**; confirm with `DESCRIBE` if the catalog renames a field.
 
 **Legacy:** `queries/01_staging/02_free_text_profile.sql` still builds a temp view + multiple blocks — use that in a notebook **cell-by-cell**, or use this folder for repo runs.
 
-When the links table is available, confirm columns with `DESCRIBE TABLE commercial.staging.stg_service_npi__parts_drawing_links` (or your gold replacement).
+Confirm columns: `DESCRIBE TABLE commercial.reporting_service_npi.rep_npi_jira_mih_tracker`.

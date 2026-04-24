@@ -14,11 +14,11 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 |------|---------|
 | `queries/01_staging/` | `01_canonical_ingress.sql` (base); `02_free_text_profile.sql` (multi-cell temp view + tops). |
 | `queries/02_enrichment/` | `01`–`03` joins, **`04` CTAS** marts, **`04c`** smoke, **`04d`** mart QA. |
-| `queries/03_profiling/` | Mart-cohort **Q2/Q3/Q4** summary + tops; **NPI drawing** coverage + sample (Genie-safe, one `SELECT` per file). |
+| `queries/03_profiling/` | Mart-cohort **Q2/Q3/Q4**; **NPI / MIH** **05**–**07** (links + link-shape; Genie-safe, one `SELECT` per file). |
 | `docs/PARTS_AND_MARTS.md` | **Why** we use flat view + repair rates, not `fct_sos_detailed_service_rpt`. |
 | `notebooks/` | Profiling, Python/pandas, Jobs source. |
 | `mapping/` | Connector/circuit **alias** definitions (CSV → load to Delta) and notes. |
-| `docs/` | Data contract, table inventory, grains, **`OPTIONAL_NPI_DRAWING_LINKS.md`** (drawing table access). |
+| `docs/` | Data contract, table inventory, grains, **`OPTIONAL_NPI_DRAWING_LINKS.md`** (`rep_npi_jira_mih_tracker` for **`05`–`06`**). |
 
 ## Hybrid delivery (org)
 
@@ -35,7 +35,7 @@ Databricks-native analytics for **wiring harness repair** warranty work: join Se
 6. Run **`queries/02_enrichment/03_warranty_ebom_join.sql`** (ad-hoc; add outer `LIMIT` if needed) or **`queries/02_enrichment/04_mart_ctas_warranty_ebom.sql`** (sections A, B, C — targets `sandbox.adiazdeleon`; change in file if needed) to build durable tables and the **mart** with `ebom_match_type`.
 7. Run **`queries/02_enrichment/04c_post_c_notebook_check.sql`** then **`04d_mart_quality_summary.sql`** after each mart refresh (counts + match mix).
 8. Run **`queries/03_profiling/01`–`04`** for free-text summary + top 30s (mart cohort).
-9. When **`stg_service_npi__parts_drawing_links`** is **authorized** (or gold), run **`queries/03_profiling/05`** and **`06`**. If blocked, continue other work; see **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**.
+9. Run **`queries/03_profiling/05`**, **`06`**, and optional **`07`** (link blanks vs Google Drive / Docs) on **`commercial.reporting_service_npi.rep_npi_jira_mih_tracker`**. See **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**.
 10. Add **Delta** mapping tables for Q2/Q3 free text as needed.
 
 ## Governance

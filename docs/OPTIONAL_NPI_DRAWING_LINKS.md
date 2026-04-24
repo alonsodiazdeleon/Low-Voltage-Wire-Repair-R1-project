@@ -1,14 +1,19 @@
-# Optional: NPI part drawing links (`stg_service_npi__parts_drawing_links`)
+# NPI drawing / MIH tracker join (mart part numbers)
 
-**Status (project):** `commercial.staging.stg_service_npi__parts_drawing_links` is a **restricted** / **non–gold** table in some environments. Queries in **`queries/03_profiling/05`** and **`06`** are written as if the table is available; they will **fail or block** until Unity Catalog / gold access is approved.
+**Source table (project default):** `commercial.reporting_service_npi.rep_npi_jira_mih_tracker`
 
-**What to do when you have access (or a promoted gold table):**
+**Previous:** `commercial.staging.stg_service_npi__parts_drawing_links` (restricted / not gold in many orgs) — **replaced** in repo SQL and docs with the reporting NPI Jira/MIH tracker above.
 
-1. Re-run **`05_mart_part_drawing_coverage_summary.sql`** and **`06_mart_part_drawing_sample.sql`**.
-2. If the **gold** object lives at a different `catalog.schema.table`, find/replace the FQN in those two files (and in `docs/TABLE_INVENTORY.md`).
+**Join (repo):** Mart `pu_part_number` (trimmed, upper) matches **`service_pn` or `production_pn`** the same way. **`05`** flags rows with a non-blank **`drawing_link`**. **`06`** takes one row per distinct mart PN (latest **`created_at`** if multiple) and selects:
 
-**Intent:** join distinct mart `pu_part_number` values to published drawing metadata (`part_number`, `revision`, `drawing_link` or successor columns) for heat-map and PD handoff work — same logic before and after promotion; only the table location and governance change.
+`service_pn`, `production_pn`, `implm_title`, `procurement_category`, `sbom_system`, `sbom_sub_system`, `service_parts_tpm`, `material_planner`, `service_manufacturing_engineer`, `operations_data_analyst`, `service_planner`, `purchasing_manager`, `ppap_status`, `drawing_link`, `created_at`
 
-**Short business justification (edit for your access ticket):** *Wiring harness warranty analytics: engineering drawing PDFs by part number to align field repairs with schematics. Analysis uses only part numbers and links already approved for product documentation; no customer PII.*
+**When to re-run `05`–`07`:** after UC read to `commercial.reporting_service_npi` (or verify column names in `rep_npi_jira_mih_tracker` with `DESCRIBE` and adjust SQL if the catalog differs by casing or renames).
 
-See also: **`docs/PARTS_AND_MARTS.md`** and **`queries/03_profiling/README.md`**.
+**Many blank `drawing_link` values (normal):** MIH/NPI rows often exist before a drawing URL is added, or the link is maintained elsewhere. Non-empty links frequently point at **Google Drive** or **Google Docs** (`drive.google.com`, `docs.google.com`); that is still a valid “has drawing” signal when present. Use **`07_mart_drawing_link_shape.sql`** to split: no MIH row, MIH row but empty link, non-blank link, and links that look Google-hosted.
+
+**Intent:** coverage and samples of part-level links / tracker rows for heat-map and PD handoff; no change to harness mart logic.
+
+**Short business justification (access ticket, if needed):** *Wiring harness warranty — join field part lines to NPI Jira/MIH metadata for engineering traceability. Part numbers and project metadata only; align to org PII policy.*
+
+See also: **`docs/PARTS_AND_MARTS.md`**, **`docs/TABLE_INVENTORY.md`**, **`queries/03_profiling/README.md`**.

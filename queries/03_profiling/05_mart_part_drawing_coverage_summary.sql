@@ -1,10 +1,7 @@
--- NPI drawing link coverage for distinct **mart** `pu_part_number` values (non-blank only).
--- Join: normalized PN ↔ `commercial.staging.stg_service_npi__parts_drawing_links.part_number`.
--- One result row. No trailing `;` (Genie safe). Confirm column names with DESCRIBE on the links table.
---
--- **Access:** `stg_service_npi__parts_drawing_links` is **restricted** / not gold in some orgs. If you
---   get a policy or governance block, skip until authorized — logic stays valid; swap FQN if DE
---   promotes a gold table. See: `docs/OPTIONAL_NPI_DRAWING_LINKS.md`.
+-- NPI / MIH tracker: coverage of distinct **mart** `pu_part_number` (non-blank) vs tracker rows
+-- with a non-blank `drawing_link`. Mart PN matches **`service_pn` or `production_pn`** (case-insensitive trim).
+-- Target: `commercial.reporting_service_npi.rep_npi_jira_mih_tracker`.
+-- One result row. No trailing `;` (Genie safe). See: `docs/OPTIONAL_NPI_DRAWING_LINKS.md`.
 
 WITH mart_pns AS (
   SELECT DISTINCT TRIM(UPPER(CAST(pu_part_number AS STRING))) AS pu_norm
@@ -14,8 +11,9 @@ WITH mart_pns AS (
 with_link AS (
   SELECT DISTINCT p.pu_norm
   FROM mart_pns p
-  INNER JOIN commercial.staging.stg_service_npi__parts_drawing_links d
-    ON TRIM(UPPER(CAST(d.part_number AS STRING))) = p.pu_norm
+  INNER JOIN commercial.reporting_service_npi.rep_npi_jira_mih_tracker d
+    ON p.pu_norm = TRIM(UPPER(CAST(d.service_pn AS STRING)))
+    OR p.pu_norm = TRIM(UPPER(CAST(d.production_pn AS STRING)))
   WHERE d.drawing_link IS NOT NULL
     AND TRIM(CAST(d.drawing_link AS STRING)) <> ''
 ),

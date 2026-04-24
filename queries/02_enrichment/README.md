@@ -13,7 +13,7 @@
 
 1. **`02_lve_ebom_connector_to_harness_map.sql`** (connector → harness from EBOM/SBOM) — in repo; tune filters after first run.
 2. **Serviceable views** — when service PN path differs from engineering EBOM.
-3. **`stg_service_npi__parts_drawing_links`** — PDF link by `part_number` for heat-map / PD handoff.
+3. **`commercial.reporting_service_npi.rep_npi_jira_mih_tracker`** — NPI Jira/MIH; `queries/03_profiling/05`–`06` (see **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**).
 4. **Warranty + map** — one saved query or view: `01_base_with_flat_view_parts` LEFT JOIN map on `pu_part_number`.
 5. **Next baby step (implemented):** run **`04d_mart_quality_summary.sql`** after each mart refresh to track match mix before free-text / drawing work.
 6. **Profiling + drawings:** **`../03_profiling/README.md`** — mart-cohort Q2/Q3/Q4 + NPI drawing coverage (Genie-safe).

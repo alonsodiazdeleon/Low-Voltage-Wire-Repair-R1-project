@@ -36,7 +36,7 @@ Confirm column names in Databricks with `DESCRIBE TABLE` / data catalog.
 
 | Table | Role |
 |-------|------|
-| `commercial.staging.stg_service_npi__parts_drawing_links` | `part_number`, `revision`, `drawing_link` (PDF URL). **May be blocked** until gold / authorized — repo SQL in **`queries/03_profiling/05`** and **`06`** is ready; run when access exists. See **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**. |
+| `commercial.reporting_service_npi.rep_npi_jira_mih_tracker` | NPI Jira / MIH. Join: mart PN ↔ `service_pn` or `production_pn` (**`05`** / **`06`**). Key columns: `service_pn`, `production_pn`, `implm_title`, `procurement_category`, `sbom_system`, `sbom_sub_system`, `service_parts_tpm`, `material_planner`, `service_manufacturing_engineer`, `operations_data_analyst`, `service_planner`, `purchasing_manager`, `ppap_status`, `drawing_link`, `created_at`. Staging `stg_service_npi__parts_drawing_links` not used. **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`**. |
 
 ## Project marts (create in *your* schema; names are defaults in repo SQL)
 
@@ -50,4 +50,4 @@ Confirm column names in Databricks with `DESCRIBE TABLE` / data catalog.
 
 - **`docs/PARTS_AND_MARTS.md`** — how flat view, repair rates, and EBOM fit the project goal.
 - **`docs/OPTIONAL_SOS_ACCESS.md`** — when the SOS fact might be worth requesting.
-- **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`** — NPI drawing staging table: restricted; re-run **03_profiling/05**–**06** after gold access.
+- **`docs/OPTIONAL_NPI_DRAWING_LINKS.md`** — NPI MIH / Jira tracker: **`rep_npi_jira_mih_tracker`**; re-run **03_profiling/05**–**06** after access and column align.
